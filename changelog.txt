@@ -1,0 +1,152 @@
+--- Change Log ---
+2016.9.20
+v1.4.10
+java调用bat脚本时，使用ProcessBuilder(cmd).inheritIO()代替StreamGobbler输出消息。经测试，中文无乱码现象
+尝试在java获取caption2ass的命令行返回信息，未成功。所以我打算重新编译它。
+Caption2Ass_PCR-mikey's-mod：
+    基于Caption2Ass_PCR_20160417源代码修改，使用vc++2010express编译
+    修改log输出逻辑，全使用stdout进行输出
+    Caption Time 信息全部打印到一行中
+
+
+2016.9.13
+v1.4.9
+让eac3to报告百分比进度，打印到一行中，代替原来的一堆减号
+调用bat脚本时，直接输出返回的信息，从而让处理进度信息集中显示到一行中
+小档改用x264 7mod进行压制。7mod版本：r2709+45 http://maruko.appinn.me/7mod.html
+mkvmerge 更新 9.4.2
+
+2016.9.3
+v1.4.8
+支持--filename-match-flags 用来设定正则表达式的flag
+
+2016.9.3
+v1.4.7
+支持读取参数列表文件
+处理完毕后打印json报告，相关参数：--enable-report --pretty-report
+用正则表达式筛选待处理文件，相关参数：--filename-match --filename-match-strictly --filename-match-convert-digit
+在--gen-avs、--exec-caption2ass、--index-video中可以引用正则表达式中的捕获组
+--gen-avs、--exec-caption2ass、--index-video 支持的模板标记增加{{src.base}}
+
+2016.8.28
+v1.4.6
+将translateCommandline方法借用到Caption2AssExec中，从而不用必须引入ant的jar文件，减小构建的体积。
+--gen-avs调用逻辑重构
+
+2016.8.28
+v1.4.5
+使用Apache Ant任务构建成品压缩包
+--eac3to-mkv-assist默认值设为fallback，将ts-1key-process.bat中的--eac3to-mkv-assist=fallback删掉
+--index-video-cmd-template参数取消，功能被转移到--index-video
+--gen-avs参数中的avs输出路径支持相对于片源的路径
+--gen-avs、--avs-encode的参数分隔符改为双冒号::，为了避免与盘符的冒号混淆
+--gen-avs、--index-video 、--exec-caption2ass中的模板标记：{{src}} {{src.dir}} {{src.filename}} {{src.basename}}
+--exec-caption2ass命令的工作路径改为片源在的文件夹，从而可以使用相对路径的文件名
+--exec-caption2ass命令执行完后，检查一下是否得到结果。
+
+
+2016.8.25
+ v1.4.4
+主程序支持用--exec-caption2ass自定义caption2ass命令来抽取caption字幕
+
+
+2016.8.25
+v1.4.3
+主程序支持--eac3to-mkv-assist，用以解决某些情况无法正确抽音轨
+ts-1key-process.bat：添加--eac3to-mkv-assist=fallback
+
+
+2016.8.24
+v1.4.2
+识别eac3to对导出的轨道文件名的修改
+    若eac3to给文件名附加了DELAY字段（如：DELAY -16ms），则生成的avs中会按照这个值来设该音轨的延时
+对eac3to导出的轨道文件进行重命名
+    若eac3to不能解析轨道比特流，则文件名会添加[BITSTREAM-PARSING-FAILED]，这种情况请务必检查成品是否音画同步
+    若eac3to对aac音轨进行了apply delay，则文件名中会标记[fix-delay]
+    若eac3to报告aac轨道存在remaining delay，则文件名中会加入DELAY字段（如：DELAY 5ms）
+preview-encode-v2.2.bat：
+    换用avs2pipemod(32bit)作为源读取avs的音频轨，这样就能在命令行提示中看到avs的错误信息。
+    用avs4x26x(32bit)读取avs的视频轨，这样就能在命令行提示中看到avs的错误信息，还能看到视频的简要属性。
+    视频使用x264_8bit_x64(64bit)进行压制。
+    用mkvmerge(64bit)封装小档为mkv格式。
+
+
+2016.8.19
+v1.4.1
+主程序生成avs文件逻辑小幅优化改进
+主程序的--gen-avs参数中的avs输出路径支持{{source}}{{source_base}}{{source_folder}}{{source_basefilename}}。于是支持给文件名添加前缀，例如:{{source_folder}}\[720p]{{source_basefilename}}-小档.avs
+preview-encode-v2.1.bat：若最终未成功得到成品文件，则不删除临时文件
+文案中增加qaac的程序依赖的叙述，适合系统中未安装itunes的用户参考
+
+2016.8.19
+v1.4
+主程序参数改动
+实现用bat脚本自动压制avs为mp4
+主程序通过--avs-encode参数调用bat脚本自动压制小档
+去掉不实用的bat脚本，保留gen-avs、ts-1key-process、ts-1key-process (mpeg2)，新增ts-1key-process&preview-encode
+
+
+2016.8.9
+集成dgavcdec109，添加【ts-1key-process--avc.bat】。dgavcdec停止开发已久，109版本处理h264-ts档仍存在一些bug，不建议使用。
+
+2016.8.8
+v1.3.2
+命令行--index-video-cmd-template指定的{{output}}，本版改为不含后缀名，若dgindexnv命令有需要添加后缀名，请手动在后面添加后缀，如：-o ""{{output}}.dgi""
+集成dgmpgdec158，添加【ts-1key-process (mpeg2).bat】，适合无nvidia显卡的用户处理mpeg2-ts时使用。如果要使用它，请将它从deprecated目录中移动到上层的目录中。
+
+2016.8.5
+v1.3.1
+命令行中用--index-video-cmd-template指定视频索引的cmd模板
+命令行中用--index-video-subfix指定视频索引的后缀名
+在调用dgindex、抽取caption字幕时，将cmd命令展示出来
+
+2016.7.28
+DGIndexNV更新2051，仅供试用，请支持正版。
+
+
+2016.7.19
+v1.3
+优化生成avs的逻辑，在命令行中打印出文本替换记录。
+优化生成avs的逻辑，自动将wav音源滤镜换为WavSource，去除wav音源的0延迟的delayaudio语句。
+
+2016.07.10
+v1.2.1
+优化调用eac3to、DGIndexNV获取返回信息的逻辑。
+尝试获得caption2ass_pcr的返回信息，但无进展。
+v1.2.2
+在处理完成时展示耗时情况。
+
+2016.07.08
+更新DGIndexNV到2049。
+配置DGIndexNV.ini中Disable_Encrypted_Audio_Warning=1，ResponseOnAudioMismatch=3。
+
+2016.06.28
+v1.2
+重构eac3to调用模块，支持自定义所要导出轨道的格式。
+支持用eac3to导出PGS格式的字幕。
+优化程序输出的提示信息，使提示信息更易读。
+
+2016.06.28
+v1.1.1
+尝试将dgindexnv输出的信息统一打印到一行中。然而测试发现如果信息都打到一行，windows命令行会出现一些错乱。放弃。
+
+2016.06.21
+执行批处理时，优先使用批处理所在目录中的jre中的java来运行主程序。如果未找到jre文件夹，则用环境变量JAVA_HOME定位java来运行主程序。如果既没有jre文件夹又没有定义JAVA_HOME环境变量，则执行批处理时，会出现错误信息，提示让用户安装java，或将jre文件夹复制到批处理所在文件夹
+
+2016.06.19
+v1.1
+调整avs生成功能的代码，支持使用自定义模板文件名（通过--avs-template参数）
+将套用avs模板的功能单独打成一个jar文件
+
+2016.06.17
+v1.0
+音频输出文件名中空格换成下划线，避免eac3to的不兼容
+bat脚本参数调整，支持无限多的传参
+生成AVS时，当检测到行里有__aud__，则为每个音轨创建一行，副音轨的行前添加注释标记。如果__aud__与__del__写在一行，则__del__会被替换为相应音轨在eac3to报告的remaining delay值。
+DGIndexNV设置中，选中Always Ignore Mismatched Audio，从而免去每次遇到Mismatched Audio的提示都要去点的麻烦。
+新增了一个bat文件，提供仅提取音频、生成avs，而不进行视频的索引的功能。
+
+2016.06.16
+v0.9
+功能初步实现
+支持批量处理
