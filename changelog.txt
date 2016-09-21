@@ -1,4 +1,11 @@
 --- Change Log ---
+2016.9.21
+v1.4.12
+调整调用eac3to时打印的log
+--exec-caption2ass默认使用Caption2Ass_PCR-mikey's-mod抽字幕
+更新dgdecnv 2052，仅供试用，请支持正版软件！
+更新x264 core 148 r2721+45 8e17f99 7mod
+将dgavcdec移除，有需要可以去videohelp下载
 
 2016.9.20
 v1.4.11
@@ -7,18 +14,15 @@ v1.4.11
     修改log输出逻辑，全使用stdout进行输出
     Caption Time 信息全部打印到一行中
     caption.dll 依然使用2012.5.8的版本
-依然使用StreamGobbler来读取并转发调用bat脚本、调用Caption2Ass_PCR时的返回信息到stdout。
-在调用bat脚本结束后，还要等待StreamGobbler线程结束后再进行其他操作。
+依然使用StreamGobbler来读取执行外部可执行程序时的返回信息，转发到stdout
+在调用bat脚本/Caption2Ass_PCR的主进程结束后，还要等待sysout、syserr的StreamGobbler线程结束后再进行其他操作
 
-
-2016.9.20
 v1.4.10
-java调用bat脚本时，使用ProcessBuilder(cmd).inheritIO()代替StreamGobbler输出消息。经测试，中文无乱码现象
-尝试在java获取caption2ass的命令行返回信息，未成功。所以我打算重新编译它。
-Caption2Ass_PCR-mikey's-mod：
-    基于Caption2Ass_PCR_20160417源代码修改，使用vc++2010express编译
-    修改log输出逻辑，全使用stdout进行输出
-    Caption Time 信息全部打印到一行中
+java调用bat脚本时逻辑调整：
+    使用ProcessBuilder(cmd).inheritIO()代替StreamGobbler输出消息。
+    经测试在windows命令行中，中文无乱码现象，而eclipse命令行中无法得到输出
+    这种办法暂时无法将该命令输出的内容捕获起来，还得改用getOutputStream来获取
+综合考虑，放弃该方案
 
 
 2016.9.13
