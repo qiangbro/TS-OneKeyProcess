@@ -1,4 +1,17 @@
 --- Change Log ---
+
+
+
+
+2016.9.29
+v1.4.13
+--eac3to-extract-format支持提取ac3格式
+--eac3to-mkv-assist参数改名为--mkv-assist，功能作调整
+全面改用ProcessBuilder替代Runtime.exec调用外部可执行的命令
+--index-video参数现在仅可使用{{src}}{{toolpath}}{{out}}这3个标记
+当调用mkvmerge时，如果发生错误或警告，则会将log输出到与目标文件同名的日志文件
+修改小档avs脚本，对于画面高度低于480的视频，使用640x360分辨率，否则使用1280x720
+
 2016.9.21
 v1.4.12
 调整调用eac3to时打印的log
